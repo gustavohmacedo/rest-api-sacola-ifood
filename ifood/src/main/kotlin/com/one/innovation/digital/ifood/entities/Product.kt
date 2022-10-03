@@ -1,6 +1,6 @@
 package com.one.innovation.digital.ifood.entities
 
-class Product(
+data class Product(
     val productId: Long,
     val name: String,
     val productValue: Double,

@@ -1,6 +1,6 @@
 package com.one.innovation.digital.ifood.entities
 
-class Restaurant(
+data class Restaurant(
     val restaurantId: Long,
     val name: String,
     val cnpj: String,
