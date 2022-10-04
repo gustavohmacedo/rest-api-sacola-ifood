@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
-@Table(name = "TB_BAG")
+@Table(name = "tb_bag")
 data class Bag(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

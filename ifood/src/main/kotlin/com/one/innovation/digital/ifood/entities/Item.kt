@@ -3,7 +3,7 @@ package com.one.innovation.digital.ifood.entities
 import javax.persistence.*
 
 @Entity
-@Table(name = "TB_ITEM")
+@Table(name = "tb_item")
 data class Item(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
