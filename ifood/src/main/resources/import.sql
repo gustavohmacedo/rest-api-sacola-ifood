@@ -8,8 +8,8 @@ INSERT INTO tb_product (product_id, is_available, name, product_value, restauran
 INSERT INTO tb_product (product_id, is_available, name, product_value, restaurant_restaurant_id) VALUES (2, 1, 'Refrigerante', 4.5, 1);
 INSERT INTO tb_product (product_id, is_available, name, product_value, restaurant_restaurant_id) VALUES (3, 1, 'Sorvete', 5.0, 2);
 
-INSERT INTO tb_bag (bag_id, bag_total_amount, is_closed_bag, payment_type, client_client_id) VALUES (1, 0.0, 0, 0, 1);
-INSERT INTO tb_bag (bag_id, bag_total_amount, is_closed_bag, payment_type, client_client_id) VALUES (2, 0.0, 0, 1, 2);
+INSERT INTO tb_bag (bag_id, bag_total_amount, is_closed_bag, payment_type, client_client_id) VALUES (1, 0.0, 0, 'CASH', 1);
+INSERT INTO tb_bag (bag_id, bag_total_amount, is_closed_bag, payment_type, client_client_id) VALUES (2, 0.0, 0, 'CARD', 2);
 
 INSERT INTO tb_item (item_id, amount, bag_bag_id, product_product_id) VALUES (1, 1, 1, 1);
 INSERT INTO tb_item (item_id, amount, bag_bag_id, product_product_id) VALUES (2, 1, 2, 2);

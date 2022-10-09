@@ -15,7 +15,7 @@ data class Bag(
     @OneToMany(cascade = [CascadeType.ALL])
     val bagItems: MutableList<Item>? = mutableListOf(),
     val bagTotalAmount: Double,
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     val paymentType: PaymentType,
     val isClosedBag: Boolean?
 )
