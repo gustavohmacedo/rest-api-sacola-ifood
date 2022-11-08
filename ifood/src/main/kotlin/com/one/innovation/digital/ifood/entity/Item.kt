@@ -1,5 +1,6 @@
-package com.one.innovation.digital.ifood.entities
+package com.one.innovation.digital.ifood.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
 
 @Entity
@@ -12,5 +13,6 @@ data class Item(
     val product: Product,
     val amount: Int,
     @ManyToOne
+    @JsonIgnore
     val bag: Bag
 )

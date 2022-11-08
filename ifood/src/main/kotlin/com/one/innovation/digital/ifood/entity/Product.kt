@@ -1,4 +1,4 @@
-package com.one.innovation.digital.ifood.entities
+package com.one.innovation.digital.ifood.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import javax.persistence.*
@@ -10,7 +10,7 @@ data class Product(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val productId: Long? = null,
     val name: String,
-    val productValue: Double,
+    val productPrice: Double,
     val isAvailable: Boolean = true,
     @ManyToOne
     @JsonIgnore

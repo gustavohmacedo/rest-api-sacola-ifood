@@ -1,6 +1,7 @@
-package com.one.innovation.digital.ifood.entities
+package com.one.innovation.digital.ifood.entity
 
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.one.innovation.digital.ifood.enumeration.PaymentType
 import javax.persistence.*
 
 @Entity
@@ -13,9 +14,9 @@ data class Bag(
     @JsonIgnore
     val client: Client,
     @OneToMany(cascade = [CascadeType.ALL])
-    val bagItems: MutableList<Item>? = mutableListOf(),
+    val items: MutableList<Item>? = mutableListOf(),
     val bagTotalAmount: Double,
     @Enumerated(EnumType.STRING)
-    val paymentType: PaymentType,
-    val isClosedBag: Boolean?
+    var paymentType: PaymentType,
+    var isClosedBag: Boolean? = false
 )

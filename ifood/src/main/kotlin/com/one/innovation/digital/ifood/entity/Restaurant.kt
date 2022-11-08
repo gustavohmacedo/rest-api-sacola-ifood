@@ -1,4 +1,4 @@
-package com.one.innovation.digital.ifood.entities
+package com.one.innovation.digital.ifood.entity
 
 import javax.persistence.*
 
