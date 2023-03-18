@@ -3,6 +3,7 @@ package com.one.innovation.digital.ifood.service.impl
 import com.one.innovation.digital.ifood.dto.*
 import com.one.innovation.digital.ifood.entity.Item
 import com.one.innovation.digital.ifood.enumeration.PaymentType
+import com.one.innovation.digital.ifood.exception.BagNotFoundException
 import com.one.innovation.digital.ifood.repository.BagRepository
 import com.one.innovation.digital.ifood.repository.ItemRepository
 import com.one.innovation.digital.ifood.service.BagService
@@ -50,7 +51,7 @@ class BagServiceImpl(
     override fun findBagById(id: Long): BagResponseDTO {
         val bagOptional = bagRepository.findById(id)
         if (bagOptional.isEmpty) {
-            throw Exception("Bag not found!")
+            throw BagNotFoundException("Bag not found")
         }
 
         return bagOptional.get().toBagResponseDTO()

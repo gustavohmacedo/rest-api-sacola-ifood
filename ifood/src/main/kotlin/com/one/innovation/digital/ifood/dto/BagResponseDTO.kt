@@ -12,8 +12,7 @@ data class BagResponseDTO(
     var bagTotalAmount: Double,
     var paymentType: PaymentType,
     var isClosedBag: Boolean?,
-
-    )
+)
 
 fun Bag.toBagResponseDTO() = BagResponseDTO(
     bagId = this.bagId!!,
