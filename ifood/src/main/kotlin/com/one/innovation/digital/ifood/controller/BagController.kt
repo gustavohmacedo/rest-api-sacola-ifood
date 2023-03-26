@@ -52,7 +52,7 @@ class BagController(
             .body(bagService.closeBagById(bagId, paymentType))
     }
 
-    @DeleteMapping("remove-items")
+    @DeleteMapping("/remove-items")
     fun removeItemFromBag(
         @RequestBody itemRequestDTO: ItemRequestDTO
     ): ResponseEntity<String> {

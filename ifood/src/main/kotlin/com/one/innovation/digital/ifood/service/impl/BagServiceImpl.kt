@@ -93,7 +93,6 @@ class BagServiceImpl(
 
         itemRepository.save(itemToRemove)
         bagRepository.save(bag.toBagEntity())
-
         return bag
     }
 
