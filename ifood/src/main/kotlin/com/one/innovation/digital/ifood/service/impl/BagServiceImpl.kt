@@ -1,10 +1,12 @@
 package com.one.innovation.digital.ifood.service.impl
 
 import com.one.innovation.digital.ifood.dto.*
+import com.one.innovation.digital.ifood.entity.Bag
 import com.one.innovation.digital.ifood.entity.Item
 import com.one.innovation.digital.ifood.enumeration.PaymentType
 import com.one.innovation.digital.ifood.exception.BagNotFoundException
 import com.one.innovation.digital.ifood.exception.ClosedBagException
+import com.one.innovation.digital.ifood.exception.EmptyBagException
 import com.one.innovation.digital.ifood.repository.BagRepository
 import com.one.innovation.digital.ifood.repository.ItemRepository
 import com.one.innovation.digital.ifood.service.BagService
@@ -61,7 +63,7 @@ class BagServiceImpl(
     override fun closeBagById(bagId: Long, paymentType: String): CloseBagResponseDTO {
         val bag = this.findBagById(bagId)
         if (bag.toBagEntity().items?.isEmpty()!!) {
-            throw Exception("The bag is empty! Please insert items into the bag!")
+            throw EmptyBagException("The bag is empty! To close the bag first you must add items")
         }
         val paymentType = if (paymentType == "CARD") PaymentType.CARD else PaymentType.CASH
         bag.paymentType = paymentType
@@ -70,4 +72,35 @@ class BagServiceImpl(
         bagRepository.save(bag.toBagEntity())
         return bag.toBagEntity().toCloseBagResponseDTO()
     }
+
+    override fun removeProductFromBag(itemRequestDTO: ItemRequestDTO): BagResponseDTO {
+        val bag = this.findBagById(itemRequestDTO.bagId)
+        val product = productService.findProductById(itemRequestDTO.productId)
+
+        val itemToRemove = Item(
+            itemId = itemRequestDTO.itemId,
+            product = product,
+            amount = itemRequestDTO.amount,
+            bag = bag.toBagEntity()
+        )
+
+        if (this.isClosedBag(bag.toBagEntity())) {
+            throw ClosedBagException("The bag is closed! You can not remove items.")
+        }
+
+        val bagItems: MutableList<Item> = bag.toBagEntity().items!!
+        bagItems.remove(itemToRemove)
+
+        itemRepository.save(itemToRemove)
+        bagRepository.save(bag.toBagEntity())
+
+        return bag
+    }
+
+    private fun isClosedBag(bag: Bag): Boolean {
+        if (bag.isClosedBag!!) return true
+        return false
+    }
+
+
 }

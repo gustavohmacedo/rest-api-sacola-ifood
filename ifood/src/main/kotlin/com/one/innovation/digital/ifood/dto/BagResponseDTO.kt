@@ -1,5 +1,6 @@
 package com.one.innovation.digital.ifood.dto
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import com.one.innovation.digital.ifood.entity.Bag
 import com.one.innovation.digital.ifood.entity.Client
 import com.one.innovation.digital.ifood.entity.Item
@@ -7,6 +8,7 @@ import com.one.innovation.digital.ifood.enumeration.PaymentType
 
 data class BagResponseDTO(
     val bagId: Long,
+    @JsonIgnore
     val client: Client,
     val bagItems: MutableList<Item>,
     var bagTotalAmount: Double,

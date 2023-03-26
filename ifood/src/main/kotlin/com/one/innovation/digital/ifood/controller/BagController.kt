@@ -5,13 +5,16 @@ import com.one.innovation.digital.ifood.dto.CloseBagResponseDTO
 import com.one.innovation.digital.ifood.dto.ItemRequestDTO
 import com.one.innovation.digital.ifood.dto.ItemResponseDTO
 import com.one.innovation.digital.ifood.service.BagService
+import org.springframework.http.HttpRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -47,5 +50,14 @@ class BagController(
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(bagService.closeBagById(bagId, paymentType))
+    }
+
+    @DeleteMapping("remove-items")
+    fun removeItemFromBag(
+        @RequestBody itemRequestDTO: ItemRequestDTO
+    ): ResponseEntity<String> {
+        bagService.removeProductFromBag(itemRequestDTO)
+        return ResponseEntity.status(HttpStatus.OK)
+            .body("Item removed successfully!");
     }
 }

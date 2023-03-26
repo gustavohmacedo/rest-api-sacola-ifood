@@ -58,6 +58,18 @@ class ExceptionHandler {
         path = request.servletPath
     )
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(EmptyBagException::class)
+    fun handleEmptyBagException(
+        exception: EmptyBagException,
+        request: HttpServletRequest
+    ) = ApiError(
+        status = HttpStatus.BAD_REQUEST.value(),
+        error = HttpStatus.BAD_REQUEST.name,
+        message = exception.message!!,
+        path = request.servletPath
+    )
+
 
 
 }
