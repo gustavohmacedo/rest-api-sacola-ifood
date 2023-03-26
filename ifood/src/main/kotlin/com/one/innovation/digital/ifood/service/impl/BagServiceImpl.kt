@@ -4,6 +4,7 @@ import com.one.innovation.digital.ifood.dto.*
 import com.one.innovation.digital.ifood.entity.Item
 import com.one.innovation.digital.ifood.enumeration.PaymentType
 import com.one.innovation.digital.ifood.exception.BagNotFoundException
+import com.one.innovation.digital.ifood.exception.ClosedBagException
 import com.one.innovation.digital.ifood.repository.BagRepository
 import com.one.innovation.digital.ifood.repository.ItemRepository
 import com.one.innovation.digital.ifood.service.BagService
@@ -20,14 +21,14 @@ class BagServiceImpl(
     override fun addItem(itemRequestDTO: ItemRequestDTO): ItemResponseDTO {
         val bag = this.findBagById(itemRequestDTO.bagId)
         val product = productService.findProductById(itemRequestDTO.productId)
-        if (bag.isClosedBag!!) {
-            throw Exception("The bag is closed! You can not add items.")
-        }
         val itemToInsert = Item(
             product = product,
             amount = itemRequestDTO.amount,
             bag = bag.toBagEntity()
         )
+        if (bag.isClosedBag!!) {
+            throw ClosedBagException("The bag is closed! You can not add items.")
+        }
         val bagItems: MutableList<Item> = bag.toBagEntity().items!!
         if (bagItems.isEmpty()) {
             bagItems.add(itemToInsert)
@@ -48,8 +49,8 @@ class BagServiceImpl(
         return itemToInsert.toItemResponseDTO()
     }
 
-    override fun findBagById(id: Long): BagResponseDTO {
-        val bagOptional = bagRepository.findById(id)
+    override fun findBagById(bagId: Long): BagResponseDTO {
+        val bagOptional = bagRepository.findById(bagId)
         if (bagOptional.isEmpty) {
             throw BagNotFoundException("Bag not found")
         }
@@ -57,8 +58,8 @@ class BagServiceImpl(
         return bagOptional.get().toBagResponseDTO()
     }
 
-    override fun closeBagById(id: Long, paymentType: String): CloseBagResponseDTO {
-        val bag = this.findBagById(id)
+    override fun closeBagById(bagId: Long, paymentType: String): CloseBagResponseDTO {
+        val bag = this.findBagById(bagId)
         if (bag.toBagEntity().items?.isEmpty()!!) {
             throw Exception("The bag is empty! Please insert items into the bag!")
         }

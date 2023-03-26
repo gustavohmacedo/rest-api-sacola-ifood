@@ -7,6 +7,6 @@ import com.one.innovation.digital.ifood.dto.ItemResponseDTO
 
 interface BagService {
     fun addItem(itemRequestDTO: ItemRequestDTO): ItemResponseDTO
-    fun findBagById(id: Long): BagResponseDTO
-    fun closeBagById(id: Long, paymentType: String): CloseBagResponseDTO
+    fun findBagById(bagId: Long): BagResponseDTO
+    fun closeBagById(bagId: Long, paymentType: String): CloseBagResponseDTO
 }

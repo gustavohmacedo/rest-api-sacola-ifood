@@ -46,6 +46,18 @@ class ExceptionHandler {
         path = request.servletPath
     )
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ClosedBagException::class)
+    fun handleClosedBagException(
+        exception: ClosedBagException,
+        request: HttpServletRequest
+    ) = ApiError(
+        status = HttpStatus.BAD_REQUEST.value(),
+        error = HttpStatus.BAD_REQUEST.name,
+        message = exception.message!!,
+        path = request.servletPath
+    )
+
 
 
 }
