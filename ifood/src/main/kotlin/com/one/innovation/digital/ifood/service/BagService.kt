@@ -9,5 +9,5 @@ interface BagService {
     fun addItem(itemRequestDTO: ItemRequestDTO): ItemResponseDTO
     fun findBagById(bagId: Long): BagResponseDTO
     fun closeBagById(bagId: Long, paymentType: String): CloseBagResponseDTO
-    fun removeProductFromBag(itemRequestDTO: ItemRequestDTO): BagResponseDTO
+    fun removeItemFromBagById(itemId: Long): BagResponseDTO
 }

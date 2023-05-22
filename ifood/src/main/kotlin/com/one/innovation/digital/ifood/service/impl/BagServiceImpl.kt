@@ -10,6 +10,7 @@ import com.one.innovation.digital.ifood.exception.EmptyBagException
 import com.one.innovation.digital.ifood.repository.BagRepository
 import com.one.innovation.digital.ifood.repository.ItemRepository
 import com.one.innovation.digital.ifood.service.BagService
+import com.one.innovation.digital.ifood.service.ItemService
 import com.one.innovation.digital.ifood.service.ProductService
 import org.springframework.stereotype.Service
 
@@ -17,7 +18,8 @@ import org.springframework.stereotype.Service
 class BagServiceImpl(
     private val bagRepository: BagRepository,
     private val productService: ProductService,
-    private val itemRepository: ItemRepository
+    private val itemRepository: ItemRepository,
+    private val itemService: ItemService
 ) : BagService {
 
     override fun addItem(itemRequestDTO: ItemRequestDTO): ItemResponseDTO {
@@ -73,27 +75,31 @@ class BagServiceImpl(
         return bag.toBagEntity().toCloseBagResponseDTO()
     }
 
-    override fun removeProductFromBag(itemRequestDTO: ItemRequestDTO): BagResponseDTO {
-        val bag = this.findBagById(itemRequestDTO.bagId)
-        val product = productService.findProductById(itemRequestDTO.productId)
+    override fun removeItemFromBagById(itemId: Long): BagResponseDTO {
 
-        val itemToRemove = Item(
-            itemId = itemRequestDTO.itemId,
-            product = product,
-            amount = itemRequestDTO.amount,
-            bag = bag.toBagEntity()
-        )
+        val item = itemService.findItemById(itemId)
 
-        if (this.isClosedBag(bag.toBagEntity())) {
+        if (item.bag.items?.isEmpty()!!) {
+            throw EmptyBagException("The bag is empty!")
+        }
+
+        if (this.isClosedBag(item.bag)) {
             throw ClosedBagException("The bag is closed! You can not remove items.")
         }
 
-        val bagItems: MutableList<Item> = bag.toBagEntity().items!!
+        val itemToRemove = Item(
+            itemId = item.itemId,
+            product = item.product,
+            amount = item.amount,
+            bag = item.bag
+        )
+
+        val bagItems: MutableList<Item> = item.bag.items!!
         bagItems.remove(itemToRemove)
 
         itemRepository.save(itemToRemove)
-        bagRepository.save(bag.toBagEntity())
-        return bag
+        bagRepository.save(item.bag)
+        return item.bag.toBagResponseDTO()
     }
 
     private fun isClosedBag(bag: Bag): Boolean {

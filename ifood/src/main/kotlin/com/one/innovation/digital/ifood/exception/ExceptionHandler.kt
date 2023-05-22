@@ -70,6 +70,16 @@ class ExceptionHandler {
         path = request.servletPath
     )
 
-
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ItemNotFoundException::class)
+    fun handleItemNotFoundException(
+        exception: ItemNotFoundException,
+        request: HttpServletRequest
+    ) = ApiError(
+        status = HttpStatus.BAD_REQUEST.value(),
+        error = HttpStatus.BAD_REQUEST.name,
+        message = exception.message!!,
+        path = request.servletPath
+    )
 
 }
