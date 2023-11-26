@@ -25,15 +25,19 @@ class BagServiceImpl(
     override fun addItem(itemRequestDTO: ItemRequestDTO): ItemResponseDTO {
         val bag = this.findBagById(itemRequestDTO.bagId)
         val product = productService.findProductById(itemRequestDTO.productId)
+
         val itemToInsert = Item(
             product = product,
             amount = itemRequestDTO.amount,
             bag = bag.toBagEntity()
         )
-        if (bag.isClosedBag!!) {
+
+        if (this.isClosedBag(bag.toBagEntity())) {
             throw ClosedBagException("The bag is closed! You can not add items.")
         }
+
         val bagItems: MutableList<Item> = bag.toBagEntity().items!!
+
         if (bagItems.isEmpty()) {
             bagItems.add(itemToInsert)
         } else {
@@ -47,9 +51,12 @@ class BagServiceImpl(
 
         }
 
-        bag.bagTotalAmount += itemToInsert.product.productPrice * itemToInsert.amount
+        val totalAmount = this.checkTotalAmount(itemToInsert)
+        bag.bagTotalAmount += totalAmount
+
         bagRepository.save(bag.toBagEntity())
         itemRepository.save(itemToInsert)
+
         return itemToInsert.toItemResponseDTO()
     }
 
@@ -94,7 +101,7 @@ class BagServiceImpl(
             bag = item.bag
         )
 
-        val bagItems: MutableList<Item> = item.bag.items!!
+        val bagItems: MutableList<Item> = item.bag.items
         bagItems.remove(itemToRemove)
 
         itemRepository.save(itemToRemove)
@@ -102,10 +109,10 @@ class BagServiceImpl(
         return item.bag.toBagResponseDTO()
     }
 
-    private fun isClosedBag(bag: Bag): Boolean {
-        if (bag.isClosedBag!!) return true
-        return false
-    }
+    private fun isClosedBag(bag: Bag): Boolean = bag.isClosedBag == true
 
+    private fun checkTotalAmount(itemToInsert: Item): Double {
+        return itemToInsert.product.productPrice * itemToInsert.amount
+    }
 
 }
